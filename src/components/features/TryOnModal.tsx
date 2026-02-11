@@ -429,19 +429,24 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                                 className="w-full p-6 bg-slate-50 border border-slate-200"
                                             >
                                                 <div className="bg-white p-2 w-fit mx-auto mb-4 border border-slate-100 shadow-sm">
-                                                    <QRCodeSVG value={`http://${serverIp}:3000`} size={120} />
+                                                    <QRCodeSVG
+                                                        value={typeof window !== 'undefined' ? (window.location.origin.includes('localhost') ? `http://${serverIp}:3000` : window.location.origin) : ""}
+                                                        size={120}
+                                                    />
                                                 </div>
                                                 <div className="text-center space-y-2">
-                                                    <p className="text-xs font-serif italic text-slate-500">Scan to upload</p>
-                                                    <div className="flex items-center justify-center gap-2 border-t border-slate-200 pt-2 mt-2">
-                                                        <span className="text-[10px] font-bold text-slate-400 uppercase">IP</span>
-                                                        <input
-                                                            type="text"
-                                                            value={serverIp}
-                                                            onChange={(e) => setServerIp(e.target.value)}
-                                                            className="w-24 text-xs font-mono text-slate-700 bg-transparent outline-none text-center"
-                                                        />
-                                                    </div>
+                                                    <p className="text-xs font-serif italic text-slate-500">Scan to open this site on phone</p>
+                                                    {typeof window !== 'undefined' && window.location.origin.includes('localhost') && (
+                                                        <div className="flex items-center justify-center gap-2 border-t border-slate-200 pt-2 mt-2">
+                                                            <span className="text-[10px] font-bold text-slate-400 uppercase">IP</span>
+                                                            <input
+                                                                type="text"
+                                                                value={serverIp}
+                                                                onChange={(e) => setServerIp(e.target.value)}
+                                                                className="w-24 text-xs font-mono text-slate-700 bg-transparent outline-none text-center"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </motion.div>
                                         )}
