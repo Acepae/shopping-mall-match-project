@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { X, Upload, Camera, Check, RefreshCcw, Smartphone } from "lucide-react";
+import { X, Upload, Camera, Check, RefreshCcw, Smartphone, Shirt, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 
@@ -231,9 +231,40 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
     const handleReset = () => {
         setUserImage(null);
         setIsDemoResult(false);
+        setIsProcessing(false);
         setScale(1);
         setRotation(0);
         stopCamera();
+    };
+
+    const handleTryOn = async () => {
+        if (!userImage || !product) return;
+
+        setIsProcessing(true);
+        console.log("🚀 Starting Virtual Try-On for:", product.name);
+
+        try {
+            // Generate the payload
+            const payload = generateTryOnPayload(
+                userImage,
+                product.image,
+                "vton",
+                product.category || "tops"
+            );
+            console.log("📦 Try-On Payload generated:", payload);
+
+            // For now, simulate the AI process
+            // In a real scenario, this would be a fetch() to /api/try-on
+            setTimeout(() => {
+                console.log("✨ AI Fitting simulation complete!");
+                setIsDemoResult(true);
+                setIsProcessing(false);
+            }, 3000);
+
+        } catch (error) {
+            console.error("❌ Error during Try-On:", error);
+            setIsProcessing(false);
+        }
     };
 
     if (!isOpen || !product) return null;
@@ -505,7 +536,31 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                         )}
                                     </div>
 
-                                    <div className="mt-4 flex flex-col items-center gap-2 relative z-30">
+                                    <div className="mt-4 flex flex-col items-center gap-4 relative z-30">
+                                        {!isDemoResult && (
+                                            <button
+                                                onClick={handleTryOn}
+                                                disabled={isProcessing}
+                                                className={`
+                                                    min-w-[200px] px-8 py-4 
+                                                    bg-indigo-600 text-white 
+                                                    font-serif italic text-xl
+                                                    rounded-2xl shadow-xl 
+                                                    flex items-center justify-center gap-3
+                                                    hover:bg-indigo-700 transition-all 
+                                                    active:scale-95
+                                                    ${isProcessing ? 'opacity-70 cursor-not-allowed' : 'hover:scale-105'}
+                                                `}
+                                            >
+                                                {isProcessing ? (
+                                                    <Loader2 size={24} className="animate-spin" />
+                                                ) : (
+                                                    <Shirt size={24} />
+                                                )}
+                                                <span>{isProcessing ? 'Fitting...' : 'Fit It!'}</span>
+                                            </button>
+                                        )}
+
                                         {isDemoResult && (
                                             <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 px-3 py-1 rounded-full mb-2 animate-in fade-in zoom-in duration-300">
                                                 <Check size={14} />
@@ -515,7 +570,7 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
 
                                         <button
                                             onClick={handleReset}
-                                            className="text-xs text-muted-foreground underline hover:text-foreground"
+                                            className="text-xs text-muted-foreground underline hover:text-foreground mt-2"
                                         >
                                             Try Another Photo
                                         </button>
