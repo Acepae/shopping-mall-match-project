@@ -516,6 +516,25 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                     </div>
                                 </div>
                             )}
+
+                            {/* Hidden File Inputs */}
+                            <input
+                                id="gallery-upload"
+                                type="file"
+                                className="hidden"
+                                accept="image/*"
+                                onChange={handleFileUpload}
+                                ref={fileInputRef}
+                            />
+                            <input
+                                id="camera-upload"
+                                type="file"
+                                className="hidden"
+                                accept="image/*"
+                                capture="user"
+                                onChange={handleFileUpload}
+                                ref={nativeCameraInputRef}
+                            />
                         </div>
                     </motion.div>
                 </div>
