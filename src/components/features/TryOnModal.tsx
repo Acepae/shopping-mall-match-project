@@ -202,23 +202,30 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
+        console.log("📄 File selected:", file?.name, file?.type, file?.size);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 const result = e.target?.result as string;
                 if (result) {
+                    console.log("✅ File read successful, processing image...");
                     processImage(result);
                 } else {
-                    console.error("Error: File read returned empty result");
+                    console.error("❌ Error: File read returned empty result");
                 }
             };
             reader.onerror = (e) => {
-                console.error(`Error reading file: ${reader.error?.message}`);
+                console.error(`❌ Error reading file: ${reader.error?.message}`);
             };
             reader.readAsDataURL(file);
         }
         // Reset the input so the same file can be selected again if needed
         e.target.value = '';
+    };
+
+    const handleGalleryClick = () => {
+        console.log("📂 Gallery button clicked - triggering hidden input");
+        fileInputRef.current?.click();
     };
 
     const handleReset = () => {
@@ -348,14 +355,13 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
 
                                     <div className="flex flex-col gap-3 w-full pt-4">
                                         {/* Gallery Trigger - Sharp, Solid Black */}
-                                        {/* Gallery Trigger - Sharp, Solid Black */}
-                                        <label
-                                            htmlFor="gallery-upload"
+                                        <button
+                                            onClick={handleGalleryClick}
                                             className="w-full px-6 py-4 bg-slate-900 text-white font-serif italic text-lg hover:bg-black transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer group border border-slate-900 shadow-sm hover:shadow-md rounded-2xl"
                                         >
                                             <Upload size={18} strokeWidth={1.5} className="text-slate-300 group-hover:text-white" />
                                             <span>Select from Gallery</span>
-                                        </label>
+                                        </button>
 
                                         {/* Camera Trigger - Use vibrant Yellow */}
                                         {typeof window !== 'undefined' && window.isSecureContext ? (
@@ -367,13 +373,13 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                                 <span className="text-4xl font-black tracking-tight not-italic font-sans">Use Camera</span>
                                             </button>
                                         ) : (
-                                            <label
-                                                htmlFor="camera-upload"
+                                            <button
+                                                onClick={() => nativeCameraInputRef.current?.click()}
                                                 className="w-full px-6 py-6 bg-yellow-400 border border-yellow-400 text-slate-900 font-serif italic hover:bg-yellow-500 hover:border-yellow-500 transition-all duration-300 flex items-center justify-center gap-4 cursor-pointer shadow-sm hover:shadow-md rounded-2xl"
                                             >
                                                 <Camera size={32} strokeWidth={2} className="text-slate-900" />
                                                 <span className="text-4xl font-black tracking-tight not-italic font-sans">Take Photo</span>
-                                            </label>
+                                            </button>
                                         )}
 
                                         {/* Mobile Connect - Solid Black */}
