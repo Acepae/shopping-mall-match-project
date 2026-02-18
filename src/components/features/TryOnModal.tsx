@@ -34,7 +34,7 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
 
     const [showMobileConnect, setShowMobileConnect] = useState(false);
     const [serverIp, setServerIp] = useState("192.168.0.108");
-    const [publicUrl, setPublicUrl] = useState("https://unique-unicorn-20414b.netlify.app");
+    const [publicUrl, setPublicUrl] = useState("https://vto-shopping-mall-final.netlify.app");
     const [copySuccess, setCopySuccess] = useState(false);
 
     const [isCameraOpen, setIsCameraOpen] = useState(false);
