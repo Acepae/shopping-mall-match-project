@@ -3,10 +3,12 @@ const GEMINI_API_KEY = process.env.NANOBANANA_API_KEY;
 
 // List of models to try in order of preference
 // [CRITICAL] Prioritizing Banana Pro for High-Quality results as requested by CEO.
+// List of models to try in order of preference
+// [COST-OPTIMIZATION] Using Flash as Primary for 90% cost reduction, Pro as Fallback for quality.
 const MODELS_TO_TRY = [
-    "gemini-3-pro-image-preview",   // High Quality (Primary - Nano Banana Pro)
-    "nano-banana-pro-preview",      // Pro Alias
-    "gemini-2.5-flash-image"        // High Speed Fallback
+    "gemini-2.5-flash-image",       // High Speed & Ultra Low Cost (Primary)
+    "gemini-3-pro-image-preview",   // High Quality (Secondary - Expensive)
+    "nano-banana-pro-preview"       // Pro Alias
 ];
 
 /**
@@ -26,16 +28,22 @@ export async function processNanoBananaTryOn(
     const userImgData = userImageBase64.replace(/^data:image\/\w+;base64,/, "");
     const productImgData = productImageBase64.replace(/^data:image\/\w+;base64,/, "");
 
-    // [CRITICAL] Use the official NanoBanana VTO instructions for deepest integration
-    const prompt = `[NANO-BANANA VTO MODE]
-    You are an expert virtual try-on engine. 
-    TASK: Synthesize the PERSON from the first image wearing the CLOTHING from the second image.
-    INSTRUCTIONS:
-    1. SEAMLESS REPLACEMENT: Remove the person's current upper-body clothing and replace it with the product from the second image.
-    2. ARCHITECTURE PRESERVATION: Preserve the person's face, hair, body shape, limbs, and background perfectly.
-    3. REALISTIC BLENDING: Match the shadows, lighting, and camera angle of the first image. The clothes must follow the body contours and wrinkles naturally.
-    4. PRODUCT DETAILS: ${productInfo}.
-    5. OUTPUT: Return only the final synthesized photorealistic image in PNG format. No text explanation.`;
+    const prompt = `[NANO-BANANA VTO COMMAND: ABSOLUTE CLONING]
+    OBJECTIVE: CLONE THE PRODUCT from Image 2 onto the person in Image 1 with 100% fidelity.
+    
+    SOURCE DATA:
+    - Product Image: Image 2 (Primary source for color, texture, and details)
+    - Target Person: Image 1
+    
+    EXECUTION PROTOCOL (ZERO DEVIATION):
+    1. PIXEL-PERFECT COLOR: You MUST extract the exact hex/color profile from Image 2. DO NOT adjust saturation or brightness. The product on the person MUST match the color of Image 2 exactly, regardless of the text description or lighting environment.
+    2. TEXTURE & DETAIL CLONING: Transfer every zipper, seam, hood state (down if shown down), and fabric texture exactly. ZERO additions (no extra cords).
+    3. REMOVE & REPLACE: Completely remove existing upper-body clothing from the person before applying the clone.
+    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, hands) exactly as they are. Do not crop.
+    
+    [STRICT] If the product is "${productInfo}", DO NOT use a generic version of this item. Use ONLY the visual evidence from Image 2.
+    
+    OUTPUT: RETURN ONLY THE IMAGE DATA. NO STYLIZATION.`;
 
     let lastError = "";
 
@@ -58,9 +66,9 @@ export async function processNanoBananaTryOn(
                     ]
                 }],
                 generationConfig: {
-                    temperature: 0.1, // Lower temperature for more stable synthesis
-                    topP: 0.95,
-                    maxOutputTokens: 8192, // Increased for image data
+                    temperature: 0.0,
+                    topP: 0.1, // Near-zero randomness for maximum accuracy
+                    maxOutputTokens: 8192,
                 },
                 safetySettings: [
                     { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },

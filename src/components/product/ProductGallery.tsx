@@ -42,7 +42,13 @@ export function ProductGallery({ images, productId, onMainImageClick, selectedIn
                             : "ring-1 ring-slate-200 hover:ring-slate-300 opacity-60 hover:opacity-100 hover:scale-105"
                             }`}
                     >
-                        <Image src={img} alt="Thumbnail" fill className="object-cover" />
+                        <Image
+                            src={`${img}?v=${Date.now()}`}
+                            alt={`Thumbnail ${idx + 1}`}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                        />
                     </button>
                 ))}
             </div>

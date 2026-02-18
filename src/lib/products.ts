@@ -11,11 +11,11 @@ export interface Product {
 const BASE_PRODUCTS: Product[] = [
     {
         id: "5",
-        name: "Callaway TA Legacy Ball Cap",
+        name: "Pink Adventure Shell Jacket",
         price: "₩30,680",
-        category: "Accessories",
+        category: "Outerwear",
         image: "/cap.jpg",
-        description: "A classic navy golf cap featuring the signature Callaway logo. Made with breathable fabric for comfort on and off the course. Perfect for completing your sporty daily look.",
+        description: "A premium, weather-resistant outdoor shell jacket in a vibrant rose pink. Features adjustable hood and waterproof zippers. Perfect for hiking or stylish daily commute.",
         images: ["/cap.jpg", "/cap.jpg", "/cap.jpg"]
     },
     { id: "2", name: "Muted Lavender Knit", price: "₩89,000", image: "/p2.jpg", category: "Tops", description: "Soft knitwear.", images: ["/p2.jpg"] },
