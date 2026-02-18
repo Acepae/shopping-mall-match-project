@@ -6,7 +6,7 @@ import { X, Upload, Camera, Check, RefreshCcw, Smartphone, Shirt, Loader2 } from
 import { motion, AnimatePresence } from "framer-motion";
 import { QRCodeSVG } from "qrcode.react";
 
-import { generateTryOnPayload } from "@/lib/try-on-service";
+// Removed generateTryOnPayload import as we move to direct API calls
 
 interface Product {
     id: string;
@@ -27,6 +27,7 @@ interface TryOnModalProps {
 export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOnModalProps) {
     const [userImage, setUserImage] = useState<string | null>(initialUserImage || null);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [processingTime, setProcessingTime] = useState(0); // Added to track long tasks
     const [isDemoResult, setIsDemoResult] = useState(false);
     const [scale, setScale] = useState(1);
     const [rotation, setRotation] = useState(0);
@@ -38,6 +39,7 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
     // Camera State
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+    const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const nativeCameraInputRef = useRef<HTMLInputElement>(null); // Fallback for mobile
@@ -139,32 +141,56 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                 saveToLocalStorage(imageDataUrl);
             }
 
-            // --- AI PAYLOAD GENERATION (Simulation) ---
+            // --- AI PAYLOAD GENERATION (Real AI) ---
             if (product && product.image) {
-                console.log(`🚀 [${new Date().toISOString()}] Generating Virtual Try-On Payload...`);
+                console.log(`🚀 [${new Date().toISOString()}] Sending Request to /api/try-on...`);
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 90000); // 90s timeout for Pro models
+
                 try {
-                    const result = await generateTryOnPayload(
-                        imageDataUrl,
-                        product.image,
-                        product.name || "clothing item",
-                        product.category || "Tops",
-                        product.description || ""
-                    );
+                    const response = await fetch('/api/try-on', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userImage: imageDataUrl,
+                            product: {
+                                image: product.image,
+                                name: product.name,
+                                category: product.category,
+                                description: product.description
+                            }
+                        }),
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        const errData = await response.json().catch(() => ({}));
+                        throw new Error(errData.error || `Server Error (${response.status})`);
+                    }
+
+                    const result = await response.json();
                     console.log("✅ API RESPONSE RECEIVED:", result);
-                    // Handle result if available. For now, we rely on the simulation below.
-                } catch (error) {
-                    // API failed (expected if backend is offline). We swallow this error to proceed to simulation.
-                    console.warn("⚠️ API Call failed or timed out. Proceeding with simulation state.", error);
+
+                    if (result.success && result.image) {
+                        console.log("✨ Setting AI Result Image");
+                        setUserImage(result.image);
+                        setIsDemoResult(true);
+                    } else {
+                        throw new Error(result.message || result.error || "Unknown error from AI server");
+                    }
+
+                } catch (error: any) {
+                    console.error("⚠️ API Call failed:", error);
+                    setErrorMsg(error.message || "AI 피팅 중 오류가 발생했습니다.");
                 }
+            } else {
+                setIsDemoResult(true);
             }
 
-            // FORCE SUCCESS STATE
-            // Whether API succeeded or failed, we show the "Result" state after a delay
-            setTimeout(() => {
-                console.log("✅ Setting Demo Result to TRUE");
-                setIsDemoResult(true);
-                setIsProcessing(false);
-            }, 1000); // 1s delay for smooth transition
+            setIsProcessing(false);
 
         } catch (err: any) {
             console.error(`Error processing image: ${err.message}`);
@@ -232,38 +258,68 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
         setUserImage(null);
         setIsDemoResult(false);
         setIsProcessing(false);
+        setErrorMsg(null);
         setScale(1);
         setRotation(0);
         stopCamera();
     };
 
     const handleTryOn = async () => {
-        if (!userImage || !product) return;
+        if (!userImage || !product || isProcessing) return;
 
         setIsProcessing(true);
-        console.log("🚀 Starting Virtual Try-On for:", product.name);
+        setProcessingTime(0);
+        setErrorMsg(null);
+        console.log("🚀 [NanoBanana] Starting Virtual Try-On for:", product.name);
+
+        // Keep track of time to show "taking long" message
+        const timerInterval = setInterval(() => {
+            setProcessingTime(prev => prev + 1);
+        }, 1000);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000); // 60s client timeout
 
         try {
-            // Generate the payload
-            const payload = generateTryOnPayload(
-                userImage,
-                product.image,
-                "vton",
-                product.category || "tops"
-            );
-            console.log("📦 Try-On Payload generated:", payload);
+            const response = await fetch('/api/try-on', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userImage: userImage,
+                    product: {
+                        image: product.image,
+                        name: product.name,
+                        category: product.category,
+                        description: product.description
+                    }
+                }),
+                signal: controller.signal
+            });
 
-            // For now, simulate the AI process
-            // In a real scenario, this would be a fetch() to /api/try-on
-            setTimeout(() => {
-                console.log("✨ AI Fitting simulation complete!");
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.error || `Server Error (${response.status})`);
+            }
+
+            const result = await response.json();
+            console.log("✅ NanoBanana Result Received:", result);
+
+            if (result.success && result.image) {
+                setUserImage(result.image);
                 setIsDemoResult(true);
-                setIsProcessing(false);
-            }, 3000);
+            } else {
+                throw new Error(result.error || "Failed to generate fitting.");
+            }
 
-        } catch (error) {
-            console.error("❌ Error during Try-On:", error);
+        } catch (error: any) {
+            console.error("❌ NanoBanana Try-On Failed:", error);
+            setErrorMsg(error.name === 'AbortError' ? "요청 시간이 초과되었습니다." : (error.message || "서버 통신 오류"));
+        } finally {
+            clearInterval(timerInterval);
             setIsProcessing(false);
+            setProcessingTime(0);
         }
     };
 
@@ -330,8 +386,17 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                         </div>
                                     </div>
                                     <div className="text-center space-y-2">
-                                        <h3 className="text-lg font-semibold animate-pulse">Connecting to AI Server...</h3>
-                                        <p className="text-muted-foreground text-sm">Synthesizing virtual fit...</p>
+                                        <h3 className="text-lg font-semibold animate-pulse">
+                                            {processingTime > 15 ? "Generating High-Quality Result..." : "Connecting to AI Server..."}
+                                        </h3>
+                                        <p className="text-muted-foreground text-sm">
+                                            {processingTime > 25 ? "Almost there! Perfecting details..." : "Synthesizing virtual fit..."}
+                                        </p>
+                                        {processingTime > 40 && (
+                                            <p className="text-amber-600 text-[10px] font-bold animate-bounce mt-2">
+                                                🚨 Server busy, please hold on...
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             ) : isCameraOpen ? (
@@ -474,33 +539,34 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                         </div>
 
                                         {/* Overlay (Product) - Rendered ALWAYS (either interactive or static) */}
-                                        <motion.div
-                                            drag={!isDemoResult} // Disable drag if result ready
-                                            dragMomentum={false}
-                                            className={`absolute ${!isDemoResult ? 'cursor-move' : ''} touch-none z-20`}
-                                            style={{
-                                                top: "15%",
-                                                left: "50%",
-                                                x: "-50%",
-                                                y: "0%",
-                                                scale: scale,
-                                                rotate: rotation
-                                            }}
-                                        >
-                                            <div className="relative w-40 h-40 group/item">
-                                                <Image
-                                                    src={product.image}
-                                                    alt="Fitting"
-                                                    fill
-                                                    className={`object-contain drop-shadow-lg rounded-2xl transition-all duration-500 ${isDemoResult ? 'filter brightness-105 contrast-110 drop-shadow-2xl' : ''}`}
-                                                />
-                                                {!isDemoResult && (
+                                        {/* Overlay (Product) - Rendered ONLY if NOT AI Result (Sticker Mode) */}
+                                        {!isDemoResult && (
+                                            <motion.div
+                                                drag={true}
+                                                dragMomentum={false}
+                                                className={`absolute cursor-move touch-none z-20`}
+                                                style={{
+                                                    top: "15%",
+                                                    left: "50%",
+                                                    x: "-50%",
+                                                    y: "0%",
+                                                    scale: scale,
+                                                    rotate: rotation
+                                                }}
+                                            >
+                                                <div className="relative w-40 h-40 group/item">
+                                                    <Image
+                                                        src={product.image}
+                                                        alt="Fitting"
+                                                        fill
+                                                        className={`object-contain drop-shadow-lg rounded-2xl transition-all duration-500`}
+                                                    />
                                                     <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg whitespace-nowrap opacity-0 group-hover/item:opacity-100 transition-opacity pointer-events-none">
                                                         Drag to move
                                                     </div>
-                                                )}
-                                            </div>
-                                        </motion.div>
+                                                </div>
+                                            </motion.div>
+                                        )}
 
                                         {/* Pro Controls Panel - ONLY visible in Manual Mode */}
                                         {!isDemoResult && (
@@ -564,6 +630,13 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                                 )}
                                                 <span>{isProcessing ? 'Fitting...' : 'Fit It!'}</span>
                                             </button>
+                                        )}
+
+                                        {errorMsg && (
+                                            <div className="flex flex-col items-center gap-2 p-3 bg-red-50 text-red-600 rounded-xl text-xs border border-red-100 max-w-[250px] text-center animate-in fade-in slide-in-from-top-1">
+                                                <p className="font-bold">Error</p>
+                                                <p>{errorMsg}</p>
+                                            </div>
                                         )}
 
                                         {isDemoResult && (

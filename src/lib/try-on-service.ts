@@ -40,78 +40,130 @@ export async function generateTryOnPayload(
     productImage: string,
     productName: string = "clothing item",
     productCategory: string = "Tops",
-    productDescription: string = ""
-): Promise<any> { // Any because we're returning the API response now, not just the payload
-    // 1. Construct the Payload (Internal Helper Logic)
-    // ... (Payload construction logic remains the same) ...
+    productDescription: string = "",
+    userImageFilename: string = "",
+    productImageFilename: string = "" // NEW: Filename of uploaded product image
+): Promise<any> {
+
+    // IF no filename is provided, fall back to basic mode (shouldn't happen with new API)
+    if (!userImageFilename) {
+        console.warn("⚠️ No userImageFilename provided, falling back to basic text-to-image.");
+    }
+
+    console.log(`🔥 Generating Advanced Payload (ControlNet + IPAdapter) for User: ${userImageFilename}, Product: ${productImageFilename}`);
+
+    // 1. Prompts
     const positivePrompt =
         "(Masterpiece, Best Quality, Photorealistic:1.3), " +
         "A photorealistic photo of a beautiful Korean woman in her 20s with long black wavy hair, smiling brightly, " +
         `wearing a ${productName} (${productCategory}) ${productDescription}, ` +
-        "arms crossed, standing in front of a clean white background, " +
+        "standing naturally in front of a clean white background, " +
         "Soft studio lighting, sharp focus, detailed fabric texture, 8k resolution, white background";
 
     const negativePrompt =
         "nsfw, low quality, bad anatomy, worst quality, distorted face, ugly, wrong proportions, text, watermark, bad hands, extra fingers, messy background, dark shadows, deformed";
 
-    const payload: TryOnPayload = {
-        prompt: positivePrompt,
-        negative_prompt: negativePrompt,
-        steps: 30,
-        cfg_scale: 7.0,
-        width: 1024,
-        height: 1280,
-        sampler_name: "dpmpp_2m_karras",
-        controlnet_args: [
-            {
-                input_image: userImage,
-                module: "openpose",
-                model: "control_v11p_sd15_openpose",
-                weight: 1.0
+    // 2. ComfyUI Workflow Construction
+    const payload = {
+        "prompt": {
+            // Node 3: KSampler (The Core)
+            "3": {
+                "inputs": {
+                    "seed": Math.floor(Math.random() * 1000000000000000),
+                    "steps": 30, // Increased steps for better quality with IP-Adapter
+                    "cfg": 7,
+                    "sampler_name": "dpmpp_2m",
+                    "scheduler": "karras",
+                    "denoise": 1,
+                    "model": ["4", 0], // DIRECT CONNECT: Checkpoint Loader (Node 4) -> KSampler (Bypass IPAdapter)
+                    "positive": ["10", 0], // Input: Conditioning from ControlNet (Node 10)
+                    "negative": ["7", 0],
+                    "latent_image": ["5", 0]
+                },
+                "class_type": "KSampler"
             },
-            {
-                input_image: userImage,
-                module: "faceid_plusv2",
-                model: "ip-adapter-faceid-plusv2_sd15",
-                weight: 0.9
+            // Node 4: Checkpoint Loader
+            "4": {
+                "inputs": {
+                    "ckpt_name": "v1-5-pruned-emaonly.ckpt"
+                },
+                "class_type": "CheckpointLoaderSimple"
             },
-            {
-                input_image: productImage,
-                module: "ip-adapter",
-                model: "ip-adapter_sd15",
-                weight: 0.8
+            // Node 5: Empty Latent Image
+            "5": {
+                "inputs": {
+                    "width": 512,
+                    "height": 768,
+                    "batch_size": 1
+                },
+                "class_type": "EmptyLatentImage"
+            },
+            // Node 6: Positive Prompt
+            "6": {
+                "inputs": {
+                    "text": positivePrompt,
+                    "clip": ["4", 1]
+                },
+                "class_type": "CLIPTextEncode"
+            },
+            // Node 7: Negative Prompt
+            "7": {
+                "inputs": {
+                    "text": negativePrompt,
+                    "clip": ["4", 1]
+                },
+                "class_type": "CLIPTextEncode"
+            },
+            // Node 8: VAE Decode
+            "8": {
+                "inputs": {
+                    "samples": ["3", 0],
+                    "vae": ["4", 2]
+                },
+                "class_type": "VAEDecode"
+            },
+            // Node 9: Save Image
+            "9": {
+                "inputs": {
+                    "filename_prefix": "ComfyUI_TryOn",
+                    "images": ["8", 0]
+                },
+                "class_type": "SaveImage"
+            },
+            // --- CONTROLNET SECTION (Pose) ---
+            "10": {
+                "inputs": {
+                    "strength": 0.8,
+                    "conditioning": ["6", 0],
+                    "control_net": ["11", 0],
+                    "image": ["13", 0]  // Connect directly to LoadImage (Node 13), bypassing Preprocessor
+                },
+                "class_type": "ControlNetApply"
+            },
+            "11": {
+                "inputs": {
+                    "control_net_name": "control_v11p_sd15_openpose.pth"
+                },
+                "class_type": "ControlNetLoader"
+            },
+            // Node 12 (Preprocessor) Removed due to "missing_node_type" error
+            "13": {
+                "inputs": {
+                    "image": userImageFilename || "example.png",
+                    "upload": "image"
+                },
+                "class_type": "LoadImage"
             }
-        ]
+            // --- IP-ADAPTER SECTION REMOVED (Nodes 20-23) ---
+        }
     };
 
-    console.log("🔥 GENERATED PAYLOAD:", payload);
+    console.log("🔥 GENERATED PAYLOAD (ControlNet + IP-Adapter):", JSON.stringify(payload, null, 2));
 
-    // 2. Call the Backend API (Proxy)
-    try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
-
-        const response = await fetch('/api/try-on', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload),
-            signal: controller.signal
-        });
-
-        clearTimeout(timeoutId);
-
-        if (!response.ok) {
-            throw new Error(`API Request Failed: ${response.statusText}`);
-        }
-
-        const result = await response.json();
-        console.log("✅ API RESPONSE:", result);
-        return result;
-
-    } catch (error) {
-        console.error("❌ API Call Failed:", error); // This is caught in TryOnModal.tsx
-        throw error;
-    }
+    // 2. Call the Backend API (Proxy) logic remains handled by route.ts, 
+    // we just return payload here if called internally, OR if this function is used to fetch directly (legacy).
+    // In our new architecture, this function just returns the JSON object.
+    return payload; // Return the payload directly
 }
+
+

@@ -13,6 +13,8 @@
     "framer-motion": "^12.33.0",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0",
     "qrcode.react": "^4.2.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
