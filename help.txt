@@ -1,0 +1,12 @@
+Usage: notebooklm-mcp-server [options] [command]
+
+NotebookLM MCP Server (Node.js)
+
+Options:
+  -V, --version   output the version number
+  -h, --help      display help for command
+
+Commands:
+  server          Start the MCP server (default)
+  auth            Run interactive authentication
+  help [command]  display help for command

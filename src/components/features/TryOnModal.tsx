@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { X, Upload, Camera, Check, RefreshCcw, Smartphone, Shirt, Loader2, Trash2, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { set as idbSet, get as idbGet } from "idb-keyval";
 import { QRCodeSVG } from "qrcode.react";
 
 interface Product {
@@ -52,8 +53,9 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                 setUserImage(initialUserImage);
             }
 
-            const raw = localStorage.getItem("my-tryon-photos");
-            if (raw) setSavedPhotos(JSON.parse(raw));
+            idbGet("my-tryon-photos").then(raw => {
+                if (raw) setSavedPhotos(raw);
+            });
 
             setIsDemoResult(false);
             setScale(1);
@@ -162,10 +164,10 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
         }
     };
 
-    const saveToLocalStorage = (imageDataUrl: string) => {
+    const saveToIndexedDB = async (imageDataUrl: string) => {
         try {
-            const raw = localStorage.getItem("my-tryon-photos");
-            let saved = raw ? JSON.parse(raw) : [null, null, null, null];
+            const raw = await idbGet("my-tryon-photos");
+            let saved = raw ? raw : [null, null, null, null];
             if (!Array.isArray(saved)) saved = [null, null, null, null];
 
             if (saved.includes(imageDataUrl)) return;
@@ -174,35 +176,52 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
             const newPhotos = [imageDataUrl, ...currentPhotos].slice(0, 4);
             while (newPhotos.length < 4) newPhotos.push(null);
 
-            localStorage.setItem("my-tryon-photos", JSON.stringify(newPhotos));
+            // 우선 상태 업데이트 (UI에 즉각 반영)
             setSavedPhotos(newPhotos);
             window.dispatchEvent(new Event("tryon-storage-update"));
+
+            // IndexedDB는 5MB 이상도 거뜬히 저장 가능하므로 원본(또는 큰 크기) 그대로 저장
+            await idbSet("my-tryon-photos", newPhotos);
         } catch (err: any) {
-            console.error("Failed to save try-on photo", err);
+            console.error("Failed to save try-on photo to IndexedDB", err);
         }
     };
 
-    const handleSaveResult = () => {
+    const handleSaveResult = async () => {
         if (!userImage || isSaved) return;
-        saveToLocalStorage(userImage);
+
+        // 1. IndexedDB를 사용하여 용량 제한 없이 원본 비트맵 보존 (색상 손실 원천 차단)
+        await saveToIndexedDB(userImage);
+
+        // 2. 갤러리(디바이스)로 실제 원본 이미지 다운로드
+        try {
+            const link = document.createElement('a');
+            link.href = userImage; // 다운로드는 고화질 원본으로
+            link.download = `tryon_result_${Date.now()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Failed to download image", error);
+        }
+
         setIsSaved(true);
         setTimeout(() => setIsSaved(false), 2000);
     };
 
-    const clearHistory = () => {
+    const clearHistory = async () => {
         if (confirm("피팅 히스토리를 모두 삭제하시겠습니까?")) {
             const empty = [null, null, null, null];
-            localStorage.setItem("my-tryon-photos", JSON.stringify(empty));
+            await idbSet("my-tryon-photos", empty);
             setSavedPhotos(empty);
             window.dispatchEvent(new Event("tryon-storage-update"));
         }
     };
 
-    const deletePhoto = (index: number) => {
+    const deletePhoto = async (index: number) => {
         const newPhotos = [...savedPhotos];
         newPhotos[index] = null;
-        // Re-sort to keep non-null photos at the front if preferred, or just keep null slot
-        localStorage.setItem("my-tryon-photos", JSON.stringify(newPhotos));
+        await idbSet("my-tryon-photos", newPhotos);
         setSavedPhotos(newPhotos);
         window.dispatchEvent(new Event("tryon-storage-update"));
     };

@@ -28,7 +28,29 @@ export async function processNanoBananaTryOn(
     const userImgData = userImageBase64.replace(/^data:image\/\w+;base64,/, "");
     const productImgData = productImageBase64.replace(/^data:image\/\w+;base64,/, "");
 
-    const prompt = `[NANO-BANANA VTO COMMAND: ABSOLUTE CLONING]
+    const isBagOrAccessory = productInfo.toLowerCase().includes('가방') ||
+        productInfo.toLowerCase().includes('bag') ||
+        productInfo.toLowerCase().includes('tote') ||
+        productInfo.toLowerCase().includes('백');
+
+    let prompt = "";
+
+    if (isBagOrAccessory) {
+        prompt = `[NANO-BANANA VTO COMMAND: ACCESSORY INTEGRATION]
+    OBJECTIVE: Add the bag/accessory from Image 2 to the person in Image 1 naturally.
+    
+    SOURCE DATA:
+    - Accessory Image: Image 2 (Extract the product and remove its white background)
+    - Target Person: Image 1
+    
+    EXECUTION PROTOCOL:
+    1. PRESERVE THE PERSON (CRITICAL): Do NOT erase or change the person's face, body, or original clothing. Their shirt, pants, and body shape must remain exactly 100% identical to Image 1.
+    2. BAG PLACEMENT: Place the accessory hanging from ONE shoulder, OR held in ONE hand at their SIDE. 
+    3. ARM/HAND ADJUSTMENT: You may redraw ONE arm or hand to naturally hold the bag or support the strap. 
+    4. NO FLOATING, NO CENTER HOLDING: The bag must NOT float. Do NOT place the bag in the middle of their chest or stomach. Do NOT have them holding it with both hands.
+    5. PRODUCT FIDELITY: Keep the exact color, shape, and design details of the accessory from Image 2.`;
+    } else {
+        prompt = `[NANO-BANANA VTO COMMAND: ABSOLUTE CLONING]
     OBJECTIVE: CLONE THE PRODUCT from Image 2 onto the person in Image 1 with 100% fidelity.
     
     SOURCE DATA:
@@ -37,9 +59,12 @@ export async function processNanoBananaTryOn(
     
     EXECUTION PROTOCOL (ZERO DEVIATION):
     1. PIXEL-PERFECT COLOR: You MUST extract the exact hex/color profile from Image 2. DO NOT adjust saturation or brightness. The product on the person MUST match the color of Image 2 exactly, regardless of the text description or lighting environment.
-    2. TEXTURE & DETAIL CLONING: Transfer every zipper, seam, hood state (down if shown down), and fabric texture exactly. ZERO additions (no extra cords).
+    2. TEXTURE & DETAIL CLONING: Transfer every zipper, strap, and fabric texture exactly. ZERO additions.
     3. REMOVE & REPLACE: Completely remove existing upper-body clothing from the person before applying the clone.
-    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, hands) exactly as they are. Do not crop.
+    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, hands) exactly as they are. Do not crop.`;
+    }
+
+    prompt += `
     
     [STRICT] If the product is "${productInfo}", DO NOT use a generic version of this item. Use ONLY the visual evidence from Image 2.
     

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
+import { get as idbGet, set as idbSet } from "idb-keyval";
 
 interface ProductInfoProps {
     name: string;
@@ -22,42 +23,56 @@ export function ProductInfo({ name, price, description, onTryOn, onBuyNow, onAdd
     // Log to confirm new version is running
     useEffect(() => { console.log("ProductInfo: Try-On Storage Version Loaded"); }, []);
 
-    // Load photos from LocalStorage on mount and listen for updates
+    // Load photos from IndexedDB on mount and listen for updates
     useEffect(() => {
-        const loadPhotos = () => {
-            const savedPhotos = localStorage.getItem("my-tryon-photos");
-            if (savedPhotos) {
-                try {
-                    setTryOnPhotos(JSON.parse(savedPhotos));
-                } catch (e) {
-                    console.error("Failed to parse saved photos", e);
+        const loadPhotos = async () => {
+            try {
+                const savedPhotos = await idbGet("my-tryon-photos");
+                if (savedPhotos) {
+                    // Ensure we have an array of length 4 to avoid undefined behavior
+                    if (Array.isArray(savedPhotos)) {
+                        const validPhotos = savedPhotos.map(p => typeof p === 'string' ? p : null);
+                        while (validPhotos.length < 4) validPhotos.push(null);
+                        setTryOnPhotos(validPhotos.slice(0, 4));
+                    }
                 }
+            } catch (e) {
+                console.error("Failed to parse saved photos from IndexedDB", e);
             }
         };
 
         loadPhotos();
         window.addEventListener("tryon-storage-update", loadPhotos);
-        return () => window.removeEventListener("tryon-storage-update", loadPhotos);
+        window.addEventListener("storage", loadPhotos); // Cross-tab syncing
+
+        // Fallback polling to catch edge cases where custom event gets lost
+        const interval = setInterval(loadPhotos, 2000);
+
+        return () => {
+            window.removeEventListener("tryon-storage-update", loadPhotos);
+            window.removeEventListener("storage", loadPhotos);
+            clearInterval(interval);
+        };
     }, []);
 
     const handlePhotoUpload = (index: number, file: File) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
             const result = e.target?.result as string;
             const newPhotos = [...tryOnPhotos];
             newPhotos[index] = result;
             setTryOnPhotos(newPhotos);
-            localStorage.setItem("my-tryon-photos", JSON.stringify(newPhotos));
+            await idbSet("my-tryon-photos", newPhotos);
             window.dispatchEvent(new Event("tryon-storage-update")); // Notify other components
         };
         reader.readAsDataURL(file);
     };
 
-    const removePhoto = (index: number) => {
+    const removePhoto = async (index: number) => {
         const newPhotos = [...tryOnPhotos];
         newPhotos[index] = null;
         setTryOnPhotos(newPhotos);
-        localStorage.setItem("my-tryon-photos", JSON.stringify(newPhotos));
+        await idbSet("my-tryon-photos", newPhotos);
         window.dispatchEvent(new Event("tryon-storage-update")); // Notify other components
     };
 
@@ -103,19 +118,16 @@ export function ProductInfo({ name, price, description, onTryOn, onBuyNow, onAdd
                                             e.stopPropagation();
                                             removePhoto(index);
                                         }}
-                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-md p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600"
                                     >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
                                     </button>
                                 </>
                             ) : (
-                                <>
-                                    {/* Placeholder UI for Upload - Clicking this could allow direct upload too, but for now it's just a placeholder for the TryOnModal results */}
-                                    <div className="flex flex-col items-center gap-1 text-slate-400 group-hover:text-indigo-500 transition-colors">
-                                        <span className="text-2xl font-light">+</span>
-                                        <span className="text-[10px] font-medium uppercase tracking-wider">Empty</span>
-                                    </div>
-                                </>
+                                <div className="flex flex-col items-center gap-1 text-slate-400 group-hover:text-indigo-500 transition-colors">
+                                    <span className="text-2xl font-light">+</span>
+                                    <span className="text-[10px] font-medium uppercase tracking-wider">Empty</span>
+                                </div>
                             )}
                         </div>
                     ))}

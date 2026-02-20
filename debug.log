@@ -159,3 +159,222 @@
 [2026-02-18T15:40:09.098Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
 [2026-02-18T15:40:24.237Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 2742888 bytes
 [2026-02-18T15:40:24.238Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:16:33.613Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:16:33.655Z] 🔍 Request Params: Product=Muted Lavender Knit, UserImageLength=1805114
+[2026-02-19T13:16:33.659Z] ✅ Product image read from local public folder
+[2026-02-19T13:16:33.661Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:16:33.667Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:16:51.486Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1819284 bytes
+[2026-02-19T13:16:51.489Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:19:39.851Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:19:39.853Z] 🔍 Request Params: Product=Classic White Tee, UserImageLength=101942
+[2026-02-19T13:19:39.855Z] ✅ Product image read from local public folder
+[2026-02-19T13:19:39.855Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:19:39.856Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:19:53.454Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1858504 bytes
+[2026-02-19T13:19:53.455Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:29:15.699Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:29:15.705Z] 🔍 Request Params: Product=Premium Collection Item 2, UserImageLength=101942
+[2026-02-19T13:29:15.709Z] ✅ Product image read from local public folder
+[2026-02-19T13:29:15.710Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:29:15.716Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:29:34.022Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1681480 bytes
+[2026-02-19T13:29:34.023Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:35:31.027Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:35:31.038Z] 🔍 Request Params: Product=Premium Collection Item 1, UserImageLength=351482
+[2026-02-19T13:35:31.042Z] ✅ Product image read from local public folder
+[2026-02-19T13:35:31.043Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:35:31.044Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:35:47.083Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1381496 bytes
+[2026-02-19T13:35:47.084Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:52:51.280Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:52:51.284Z] 🔍 Request Params: Product=Premium Collection Item 13, UserImageLength=101942
+[2026-02-19T13:52:51.286Z] ✅ Product image read from local public folder
+[2026-02-19T13:52:51.288Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:52:51.290Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:53:03.929Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1623900 bytes
+[2026-02-19T13:53:03.930Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:54:00.082Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:54:00.085Z] 🔍 Request Params: Product=Premium Collection Item 16, UserImageLength=101942
+[2026-02-19T13:54:00.086Z] ✅ Product image read from local public folder
+[2026-02-19T13:54:00.087Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:54:00.088Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:54:12.146Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1695160 bytes
+[2026-02-19T13:54:12.147Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:55:07.168Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:55:07.172Z] 🔍 Request Params: Product=Premium Collection Item 14, UserImageLength=101942
+[2026-02-19T13:55:07.174Z] ✅ Product image read from local public folder
+[2026-02-19T13:55:07.174Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:55:07.176Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:55:19.247Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1670188 bytes
+[2026-02-19T13:55:19.248Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:55:55.209Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:55:55.219Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=1670210
+[2026-02-19T13:55:55.220Z] ✅ Product image read from local public folder
+[2026-02-19T13:55:55.221Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:55:55.223Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:56:13.393Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1585308 bytes
+[2026-02-19T13:56:13.395Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-19T13:57:06.804Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-19T13:57:06.807Z] 🔍 Request Params: Product=Premium Collection Item 7, UserImageLength=101942
+[2026-02-19T13:57:06.808Z] ✅ Product image read from local public folder
+[2026-02-19T13:57:06.809Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-19T13:57:06.810Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-19T13:57:19.745Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1726528 bytes
+[2026-02-19T13:57:19.746Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T12:15:56.748Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T12:15:56.754Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=101942
+[2026-02-20T12:15:56.757Z] ✅ Product image read from local public folder
+[2026-02-20T12:15:56.759Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T12:15:56.768Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T12:16:07.669Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1526008 bytes
+[2026-02-20T12:16:07.670Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T12:22:32.362Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T12:22:32.367Z] 🔍 Request Params: Product=Classic White Tee, UserImageLength=101942
+[2026-02-20T12:22:32.373Z] ✅ Product image read from local public folder
+[2026-02-20T12:22:32.374Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T12:22:32.378Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T12:22:43.088Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1690076 bytes
+[2026-02-20T12:22:43.089Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T13:41:30.202Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T13:41:30.222Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=1690098
+[2026-02-20T13:41:30.223Z] ✅ Product image read from local public folder
+[2026-02-20T13:41:30.224Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T13:41:30.228Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T13:41:45.515Z] ⚠️ [NanoBanana] Model gemini-2.5-flash-image returned NO image data. Response: {"candidates":[{"finishReason":"IMAGE_SAFETY","index":0,"finishMessage":"Unable to show the generated image. The image was filtered out because it violated Google's [Generative AI Prohibited Use policy](https://policies.google.com/terms/generative-ai/use-policy). You will not be charged for blocked images. Try rephrasing the prompt. If you think this was an error, [send feedback](https://ai.google.dev/gemini-api/docs/troubleshooting)."}],"usageMetadata":{"promptTokenCount":833,"candidatesTokenCo
+[2026-02-20T13:41:45.518Z] 📡 [NanoBanana] Attempting with model: gemini-3-pro-image-preview (Safe Timeout: 60s)
+[2026-02-20T13:42:29.133Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T13:42:29.135Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=101942
+[2026-02-20T13:42:29.136Z] ✅ Product image read from local public folder
+[2026-02-20T13:42:29.137Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T13:42:29.139Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T13:42:29.735Z] ✅ [NanoBanana] Model gemini-3-pro-image-preview SUCCESS - Returned 484004 bytes
+[2026-02-20T13:42:29.736Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T13:42:42.486Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1596408 bytes
+[2026-02-20T13:42:42.489Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T13:57:57.572Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T13:57:57.579Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=66346
+[2026-02-20T13:57:57.582Z] ✅ Product image read from local public folder
+[2026-02-20T13:57:57.583Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T13:57:57.584Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T13:58:13.501Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1843132 bytes
+[2026-02-20T13:58:13.502Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:01:53.328Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:01:53.331Z] 🔍 Request Params: Product=Premium Collection Item 4, UserImageLength=101942
+[2026-02-20T14:01:53.332Z] ✅ Product image read from local public folder
+[2026-02-20T14:01:53.333Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:01:53.335Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:02:06.375Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1579328 bytes
+[2026-02-20T14:02:06.377Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:02:57.097Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:02:57.109Z] 🔍 Request Params: Product=Premium Collection Item 4, UserImageLength=1690098
+[2026-02-20T14:02:57.111Z] ✅ Product image read from local public folder
+[2026-02-20T14:02:57.111Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:02:57.114Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:03:20.098Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1646628 bytes
+[2026-02-20T14:03:20.100Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:05:39.326Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:05:39.354Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=1805114
+[2026-02-20T14:05:39.355Z] ✅ Product image read from local public folder
+[2026-02-20T14:05:39.356Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:05:39.359Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:05:56.785Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1805088 bytes
+[2026-02-20T14:05:56.786Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:06:23.090Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:06:23.107Z] 🔍 Request Params: Product=Classic White Tee, UserImageLength=1805110
+[2026-02-20T14:06:23.110Z] ✅ Product image read from local public folder
+[2026-02-20T14:06:23.113Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:06:23.116Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:06:40.313Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1943572 bytes
+[2026-02-20T14:06:40.314Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:11:57.201Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:11:57.205Z] 🔍 Request Params: Product=Pink Adventure Shell Jacket, UserImageLength=101942
+[2026-02-20T14:11:57.206Z] ✅ Product image read from local public folder
+[2026-02-20T14:11:57.207Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:11:57.209Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:12:11.567Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1679308 bytes
+[2026-02-20T14:12:11.568Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:17:51.448Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:17:51.450Z] 🔍 Request Params: Product=Pink Adventure Shell Jacket, UserImageLength=101942
+[2026-02-20T14:17:51.452Z] ✅ Product image read from local public folder
+[2026-02-20T14:17:51.453Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:17:51.454Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:18:08.272Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1672708 bytes
+[2026-02-20T14:18:08.273Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:27:24.701Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:27:24.704Z] 🔍 Request Params: Product=Pink Adventure Shell Jacket, UserImageLength=101942
+[2026-02-20T14:27:24.706Z] ✅ Product image read from local public folder
+[2026-02-20T14:27:24.708Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:27:24.715Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:27:37.969Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1666088 bytes
+[2026-02-20T14:27:37.970Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:28:16.566Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:28:16.568Z] 🔍 Request Params: Product=Premium Collection Item 6, UserImageLength=101942
+[2026-02-20T14:28:16.569Z] ✅ Product image read from local public folder
+[2026-02-20T14:28:16.571Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:28:16.573Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:28:27.139Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1614100 bytes
+[2026-02-20T14:28:27.141Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:29:02.549Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:29:02.560Z] 🔍 Request Params: Product=Dusty Rose Pleated Skirt, UserImageLength=1614122
+[2026-02-20T14:29:02.562Z] ✅ Product image read from local public folder
+[2026-02-20T14:29:02.563Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:29:02.566Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:29:16.052Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1788840 bytes
+[2026-02-20T14:29:16.053Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:29:46.055Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:29:46.069Z] 🔍 Request Params: Product=Classic White Tee, UserImageLength=1614122
+[2026-02-20T14:29:46.071Z] ✅ Product image read from local public folder
+[2026-02-20T14:29:46.072Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:29:46.074Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:30:02.018Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1732996 bytes
+[2026-02-20T14:30:02.019Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:34:05.930Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:34:05.933Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=101942
+[2026-02-20T14:34:05.935Z] ✅ Product image read from local public folder
+[2026-02-20T14:34:05.936Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:34:05.937Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:34:20.015Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1497024 bytes
+[2026-02-20T14:34:20.016Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:42:03.112Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:42:03.115Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=101942
+[2026-02-20T14:42:03.116Z] ✅ Product image read from local public folder
+[2026-02-20T14:42:03.117Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:42:03.121Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:42:15.171Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1659036 bytes
+[2026-02-20T14:42:15.172Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:50:21.017Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:50:21.019Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=101942
+[2026-02-20T14:50:21.021Z] ✅ Product image read from local public folder
+[2026-02-20T14:50:21.022Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:50:21.026Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:50:32.790Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1619432 bytes
+[2026-02-20T14:50:32.791Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:52:20.532Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:52:20.535Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=351482
+[2026-02-20T14:52:20.537Z] ✅ Product image read from local public folder
+[2026-02-20T14:52:20.537Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:52:20.540Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:52:32.907Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1589972 bytes
+[2026-02-20T14:52:32.909Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T14:57:35.521Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T14:57:35.528Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=351482
+[2026-02-20T14:57:35.530Z] ✅ Product image read from local public folder
+[2026-02-20T14:57:35.532Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T14:57:35.535Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T14:57:49.469Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1626464 bytes
+[2026-02-20T14:57:49.470Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T15:03:01.670Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T15:03:01.677Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=351482
+[2026-02-20T15:03:01.679Z] ✅ Product image read from local public folder
+[2026-02-20T15:03:01.680Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T15:03:01.684Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T15:03:12.645Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1565796 bytes
+[2026-02-20T15:03:12.646Z] 🎉 NanoBanana Response Success - Image Generated
+[2026-02-20T15:07:48.027Z] 🟢 [NanoBanana] POST request received at /api/try-on
+[2026-02-20T15:07:48.031Z] 🔍 Request Params: Product=Premium Collection Item 8, UserImageLength=351482
+[2026-02-20T15:07:48.033Z] ✅ Product image read from local public folder
+[2026-02-20T15:07:48.034Z] 🚀 Calling NanoBanana Cloud API...
+[2026-02-20T15:07:48.037Z] 📡 [NanoBanana] Attempting with model: gemini-2.5-flash-image (Safe Timeout: 30s)
+[2026-02-20T15:07:59.502Z] ✅ [NanoBanana] Model gemini-2.5-flash-image SUCCESS - Returned 1588000 bytes
+[2026-02-20T15:07:59.513Z] 🎉 NanoBanana Response Success - Image Generated

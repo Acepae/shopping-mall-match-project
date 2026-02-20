@@ -1,0 +1,1 @@
+NotebookLM MCP Server v3.0.5 running on stdio
