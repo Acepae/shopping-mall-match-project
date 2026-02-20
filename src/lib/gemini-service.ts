@@ -60,8 +60,8 @@ export async function processNanoBananaTryOn(
     EXECUTION PROTOCOL (ZERO DEVIATION):
     1. PIXEL-PERFECT COLOR: You MUST extract the exact hex/color profile from Image 2. DO NOT adjust saturation or brightness. The product on the person MUST match the color of Image 2 exactly, regardless of the text description or lighting environment.
     2. TEXTURE & DETAIL CLONING: Transfer every zipper, strap, and fabric texture exactly. ZERO additions.
-    3. REMOVE & REPLACE: Completely remove existing upper-body clothing from the person before applying the clone.
-    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, hands) exactly as they are. Do not crop.`;
+    3. REMOVE ORIGINAL CLOTHING (CRITICAL): Completely ERASE the person's existing upper-body clothing. DO NOT layer or overlap the new product over the old clothing. If the original shirt has long sleeves and the new product has short sleeves, YOU MUST GENERATE BARE SKIN (bare arms) where the original sleeves used to be. The original clothing MUST NOT be visible anywhere.
+    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, and original hands) exactly as they are. Do not crop.`;
     }
 
     prompt += `
