@@ -3,7 +3,7 @@
 import { useCart } from "@/context/CartContext";
 import { use, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Shirt } from "lucide-react";
+import { ArrowLeft, Home, Shirt } from "lucide-react";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductInfo } from "@/components/product/ProductInfo";
 // import { ProductDetailContent } from "@/components/product/ProductDetailContent";
@@ -94,13 +94,23 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 }}
             />
 
-            {/* Payment Modal */}
             <PaymentModal
                 isOpen={isPaymentOpen}
                 onClose={() => setIsPaymentOpen(false)}
                 productName={product.name}
                 productPrice={product.price}
             />
+
+            {/* Floating Return to Main Button */}
+            <Link
+                href="/"
+                className="fixed bottom-6 left-6 p-4 bg-white border border-slate-200 text-slate-900 rounded-full shadow-lg hover:scale-105 hover:bg-slate-50 transition-all z-40 flex items-center gap-2 group"
+            >
+                <div className="bg-indigo-50 p-2 rounded-full group-hover:bg-indigo-100 transition-colors">
+                    <Home size={20} className="text-indigo-600" />
+                </div>
+                <span className="font-bold pr-2 hidden md:block">메인으로 가기</span>
+            </Link>
         </div>
     );
 }

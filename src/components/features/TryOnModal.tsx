@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { X, Upload, Camera, Check, RefreshCcw, Smartphone, Shirt, Loader2, Trash2, Copy } from "lucide-react";
+import { X, Upload, Camera, Check, RefreshCcw, Smartphone, Shirt, Loader2, Trash2, Copy, Home } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { set as idbSet, get as idbGet } from "idb-keyval";
 import { QRCodeSVG } from "qrcode.react";
@@ -41,6 +41,7 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
     const [isCameraOpen, setIsCameraOpen] = useState(false);
     const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [prevProductId, setPrevProductId] = useState<string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const nativeCameraInputRef = useRef<HTMLInputElement>(null);
@@ -49,21 +50,30 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
 
     useEffect(() => {
         if (isOpen && product) {
-            if (initialUserImage) {
+            // Only fully reset the modal state if opening a DIFFERENT product
+            if (product.id !== prevProductId) {
+                if (initialUserImage) {
+                    setUserImage(initialUserImage);
+                } else {
+                    setUserImage(null);
+                }
+
+                idbGet("my-tryon-photos").then(raw => {
+                    if (raw) setSavedPhotos(raw);
+                });
+
+                setIsDemoResult(false);
+                setScale(1);
+                setRotation(0);
+                setIsSaved(false);
+                setErrorMsg(null);
+                setPrevProductId(product.id);
+            } else if (initialUserImage && initialUserImage !== userImage) {
+                // If opening same product but user clicked a specific history photo
                 setUserImage(initialUserImage);
             }
-
-            idbGet("my-tryon-photos").then(raw => {
-                if (raw) setSavedPhotos(raw);
-            });
-
-            setIsDemoResult(false);
-            setScale(1);
-            setRotation(0);
-            setIsSaved(false);
-            setErrorMsg(null);
         }
-    }, [isOpen, product, initialUserImage]);
+    }, [isOpen, product, initialUserImage, prevProductId, userImage]);
 
     const stopCamera = () => {
         if (cameraStream) {
@@ -382,11 +392,12 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                 <div className="relative w-full aspect-[3/4] bg-white rounded-2xl p-4 shadow-inner border border-border/40 overflow-hidden flex items-center justify-center">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src={product.image}
+                                            src={`${product.image}?v=${Date.now()}`}
                                             alt={product.name}
                                             fill
                                             className="object-contain"
                                             sizes="(max-width: 768px) 100vw, 33vw"
+                                            unoptimized
                                         />
                                     </div>
                                 </div>
@@ -403,6 +414,13 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                 >
                                     <Smartphone size={16} className="text-indigo-600" />
                                     <span>Mobile Connect</span>
+                                </button>
+                                <button
+                                    onClick={onClose}
+                                    className="w-full py-3 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded-xl flex items-center justify-center gap-2 hover:bg-indigo-100 transition-all text-sm font-bold shadow-sm active:scale-95"
+                                >
+                                    <Home size={18} />
+                                    <span>메인으로 돌아가기</span>
                                 </button>
                             </div>
                         </div>
@@ -495,7 +513,7 @@ export function TryOnModal({ isOpen, onClose, product, initialUserImage }: TryOn
                                                 style={{ top: "15%", left: "50%", x: "-50%", scale: scale, rotate: rotation }}
                                             >
                                                 <div className="relative w-56 h-56 drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)]">
-                                                    <Image src={product.image} alt="Fitting" fill className="object-contain" />
+                                                    <Image src={`${product.image}?v=${Date.now()}`} alt="Fitting" fill className="object-contain" unoptimized />
                                                 </div>
                                             </motion.div>
                                         )}
