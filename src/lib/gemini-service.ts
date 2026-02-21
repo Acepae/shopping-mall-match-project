@@ -4,11 +4,11 @@ const GEMINI_API_KEY = process.env.NANOBANANA_API_KEY;
 // List of models to try in order of preference
 // [CRITICAL] Prioritizing Banana Pro for High-Quality results as requested by CEO.
 // List of models to try in order of preference
-// [COST-OPTIMIZATION] Using Flash as Primary for 90% cost reduction, Pro as Fallback for quality.
+// [CRITICAL] Using Nano-Banana Pro (Gemini 3 Pro) as Primary for high-quality, complex prompt adherence (like exact hand postures).
 const MODELS_TO_TRY = [
-    "gemini-2.5-flash-image",       // High Speed & Ultra Low Cost (Primary)
-    "gemini-3-pro-image-preview",   // High Quality (Secondary - Expensive)
-    "nano-banana-pro-preview"       // Pro Alias
+    "nano-banana-pro-preview",      // Pro Alias (Primary for complex VTO)
+    "gemini-3-pro-image-preview",   // High Quality Fallback
+    "gemini-2.5-flash-image"        // Fast/Low Cost Fallback
 ];
 
 /**
@@ -24,31 +24,80 @@ export async function processNanoBananaTryOn(
     if (!GEMINI_API_KEY) {
         throw new Error("NANOBANANA_API_KEY is not configured.");
     }
-
     const userImgData = userImageBase64.replace(/^data:image\/\w+;base64,/, "");
     const productImgData = productImageBase64.replace(/^data:image\/\w+;base64,/, "");
 
-    const isBagOrAccessory = productInfo.toLowerCase().includes('가방') ||
-        productInfo.toLowerCase().includes('bag') ||
-        productInfo.toLowerCase().includes('tote') ||
-        productInfo.toLowerCase().includes('백');
+    const lowerInfo = productInfo.toLowerCase();
+
+    const isShoes = lowerInfo.includes('신발') ||
+        lowerInfo.includes('shoe') ||
+        lowerInfo.includes('sneaker') ||
+        lowerInfo.includes('운동화') ||
+        /\bitem 9\b/.test(lowerInfo) || // Known sneaker item from mock data
+        /\bitem 8\b/.test(lowerInfo) ||
+        /\bitem 12\b/.test(lowerInfo); // Explicitly flag 12 as a shoe just in case
+
+    const isBagOrAccessory = lowerInfo.includes('가방') ||
+        lowerInfo.includes('bag') ||
+        lowerInfo.includes('tote') ||
+        lowerInfo.includes('백') ||
+        lowerInfo.includes('accessories') ||
+        // Only target specific known bag items to avoid false positives on shoes/clothes
+        /\bitem 1\b/.test(lowerInfo) ||
+        /\bitem 2\b/.test(lowerInfo);
+
+    const isBackpack = lowerInfo.includes('백팩') ||
+        lowerInfo.includes('backpack');
 
     let prompt = "";
 
-    if (isBagOrAccessory) {
-        prompt = `[NANO-BANANA VTO COMMAND: ACCESSORY INTEGRATION]
-    OBJECTIVE: Add the bag/accessory from Image 2 to the person in Image 1 naturally.
+    if (isBackpack) {
+        prompt = `[NANO-BANANA VTO COMMAND: BACKPACK EDITORIAL POSE]
+    OBJECTIVE: Redraw the person wearing the backpack from Image 2 in a professional fashion model pose exactly matching the reference.
     
     SOURCE DATA:
-    - Accessory Image: Image 2 (Extract the product and remove its white background)
-    - Target Person: Image 1
+    - Accessory Image: Image 2 (Extract ONLY the physical backpack. ABSOLUTELY DO NOT copy any text, Korean characters, prices, numbers, or logos from the background of Image 2)
+    - Target Person: Image 1 (Face and identity source)
     
-    EXECUTION PROTOCOL:
-    1. PRESERVE THE PERSON (CRITICAL): Do NOT erase or change the person's face, body, or original clothing. Their shirt, pants, and body shape must remain exactly 100% identical to Image 1.
-    2. BAG PLACEMENT: Place the accessory hanging from ONE shoulder, OR held in ONE hand at their SIDE. 
-    3. ARM/HAND ADJUSTMENT: You may redraw ONE arm or hand to naturally hold the bag or support the strap. 
-    4. NO FLOATING, NO CENTER HOLDING: The bag must NOT float. Do NOT place the bag in the middle of their chest or stomach. Do NOT have them holding it with both hands.
-    5. PRODUCT FIDELITY: Keep the exact color, shape, and design details of the accessory from Image 2.`;
+    EXECUTION PROTOCOL (ABSOLUTE 3D PUPPETRY OVERRIDE):
+    1. CAMERA & BODY STANCE (CRITICAL OVERRIDE): You MUST IGNORE the pose of the person in Image 1. The model MUST be drawn standing with her back mostly towards the camera, her body turned towards the RIGHT side of the frame. We must see her back and the backpack clearly.
+    2. HEAD PLACEMENT (CRITICAL): Her HEAD MUST be turned back over her RIGHT shoulder to look directly at the camera with a natural smile. We must see the right side of her face.
+    3. BACKPACK PLACEMENT (CRITICAL): The backpack MUST ONLY be worn properly on her back, with both shoulder straps over her shoulders. The backpack must NOT be held in front of her body. It must NOT be held by the top handle.
+    4. ARM PLACEMENT (CRITICAL): Her RIGHT hand MUST be gently holding or resting on the right shoulder strap near her front shoulder/collarbone area. Her LEFT arm is mostly hidden or resting naturally.
+    5. SEAMLESS BLEND: Ensure the backpack straps perfectly conform to her shoulders and back. It should look like a high-end e-commerce fashion photoshoot against a completely blank white background.
+    6. PRESERVE IDENTITY: Keep her facial features and hair exactly like Image 1, but adapt her body perfectly into this exact posture.
+    7. TEXT & ARTIFACT BAN (CRITICAL): You MUST completely ERACE and DESTROY any text, Korean characters, product names, or prices that might appear in Image 2. NO TEXT ALLOWED ANYWHERE.
+    8. BAN LIST (CRITICAL): Do NOT face fully forward. Do NOT hold the backpack in front of the body. Do NOT hold the backpack by the top handle only. The backpack MUST be worn on the back. Do NOT hang the backpack on just one shoulder.`;
+    } else if (isShoes) {
+        prompt = `[NANO-BANANA VTO COMMAND: FOOTWEAR EDITORIAL CROUCHING POSE]
+    OBJECTIVE: Redraw the person wearing the shoes from Image 2 in a dynamic crouching/squatting fashion pose exactly matching the reference.
+    
+    SOURCE DATA:
+    - Shoes Image: Image 2 (Primary source for design, color, and texture)
+    - Target Person: Image 1 (Face and identity source)
+    
+    EXECUTION PROTOCOL (ABSOLUTE 3D PUPPETRY OVERRIDE):
+    1. CAMERA & BODY STANCE (CRITICAL OVERRIDE): You MUST IGNORE the standing pose of the person in Image 1. The model MUST be drawn in a ¾ profile crouching pose. Her entire body MUST be turned to face the RIGHT side of the frame. However, her HEAD MUST be turned to look FORWARD, directly at the camera with clear eye contact.
+    2. LEG PLACEMENT (CRITICAL): Her RIGHT knee (the knee closer to the camera) MUST be bent upwards near her chest, pointing towards the right. Her LEFT knee (the knee further from the camera) MUST be bent lower towards the ground.
+    3. ARM PLACEMENT (CRITICAL): Her RIGHT arm (closer to the camera) MUST be resting elegantly with the hand draped over her raised right knee. Her LEFT arm MUST rest naturally on her lower left leg/thigh.
+    4. FOOTWEAR ENFORCEMENT: The shoes from Image 2 MUST be worn perfectly on BOTH feet, clearly visible at the bottom of the frame.
+    5. PRESERVE IDENTITY: Keep the person's face, hair, and clothing style unchanged from Image 1, but adapt their body perfectly into this exact crouching posture, while ensuring eye contact with the camera.
+    6. BAN LIST (CRITICAL): Do NOT draw the person standing up straight. Do NOT hold the shoes in hands. Do NOT look away from the camera. The shoes MUST ONLY be worn on the feet. DO NOT generate any text, prices, numbers, or watermarks.`;
+    } else if (isBagOrAccessory) {
+        prompt = `[NANO-BANANA VTO COMMAND: FASHION EDITORIAL ACCESSORY POSE]
+    OBJECTIVE: Redraw the person holding the bag/accessory from Image 2 in a professional fashion model pose.
+    
+    SOURCE DATA:
+    - Accessory Image: Image 2 (Extract ONLY the physical bag. ABSOLUTELY DO NOT copy any text, Korean characters, prices, numbers, or logos from the background of Image 2)
+    - Target Person: Image 1 (Face and identity source)
+    
+    EXECUTION PROTOCOL (ABSOLUTE 3D PUPPETRY OVERRIDE):
+    1. CAMERA & STANCE: The model's body MUST be standing sideways in a LEFT PROFILE pose. Her chest should be slightly open toward the camera. ONLY her RIGHT arm should be holding the bag. Turn her head so she looks at the camera.
+    2. THE BAG CARRY: The arm holding the bag MUST hang straight down. The bag and the hand holding it MUST be positioned visibly in FRONT of her right thigh/hip. 
+    3. SEAMLESS BLEND: Ensure the hand physically connects with the bag handle/straps. The bag MUST NOT float. It should look like a high-end e-commerce fashion photoshoot against a completely blank background.
+    4. PRESERVE IDENTITY: Do not change her facial features, hair, or overall appearance from Image 1.
+    5. BAN LIST (CRITICAL): Do NOT hold the bag behind her back. Do NOT look backward. Do NOT face right. Do NOT hang the bag straps over the forearm, wrist, or crook of the elbow. The arm MUST NOT be bent at the elbow. Do NOT have her hold the bag with two hands.
+    6. TEXT & ARTIFACT BAN (CRITICAL OVERRIDE): You MUST completely ERACE and DESTROY any text, Korean characters, product names, prices (e.g., "17,880원"), or descriptions that might appear in Image 2. The final image MUST contain ONLY the person and the product. NO TEXT ALLOWED ANYWHERE.`;
     } else {
         prompt = `[NANO-BANANA VTO COMMAND: ABSOLUTE CLONING]
     OBJECTIVE: CLONE THE PRODUCT from Image 2 onto the person in Image 1 with 100% fidelity.
@@ -60,8 +109,8 @@ export async function processNanoBananaTryOn(
     EXECUTION PROTOCOL (ZERO DEVIATION):
     1. PIXEL-PERFECT COLOR: You MUST extract the exact hex/color profile from Image 2. DO NOT adjust saturation or brightness. The product on the person MUST match the color of Image 2 exactly, regardless of the text description or lighting environment.
     2. TEXTURE & DETAIL CLONING: Transfer every zipper, strap, and fabric texture exactly. ZERO additions.
-    3. REMOVE ORIGINAL CLOTHING (CRITICAL): Completely ERASE the person's existing upper-body clothing. DO NOT layer or overlap the new product over the old clothing. If the original shirt has long sleeves and the new product has short sleeves, YOU MUST GENERATE BARE SKIN (bare arms) where the original sleeves used to be. The original clothing MUST NOT be visible anywhere.
-    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, and original hands) exactly as they are. Do not crop.`;
+    3. REMOVE & REPLACE: Completely remove existing upper-body clothing from the person before applying the clone.
+    4. ANATOMICAL INTEGRITY: Preserve the person (head, face, hair, hands) exactly as they are. Do not crop.`;
     }
 
     prompt += `
